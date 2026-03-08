@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dota 2 Attribute Guesser</title>
+    <meta
+      name="description"
+      content="A static Dota 2 hero attribute guessing game built for GitHub Pages."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <noscript>
+      <div class="noscript">This game needs JavaScript enabled.</div>
+    </noscript>
+
+    <main class="app-shell">
+      <header class="hero-header">
+        <p class="eyebrow">Static GitHub Pages app</p>
+        <h1>Dota 2 Attribute Guesser</h1>
+        <p class="subtitle">
+          Guess each hero's primary attribute until you've completed the full roster.
+        </p>
+      </header>
+
+      <section id="status-bar" class="status-bar hidden" aria-live="polite">
+        <div class="status-pill">
+          <span class="status-label">Answered</span>
+          <strong id="answered-count">0/0</strong>
+        </div>
+        <div class="status-pill">
+          <span class="status-label">Left</span>
+          <strong id="remaining-count">0</strong>
+        </div>
+        <div class="status-pill">
+          <span class="status-label">Correct</span>
+          <strong id="correct-count">0</strong>
+        </div>
+      </section>
+
+      <section id="screen-start" class="screen card">
+        <div class="card-content start-content">
+          <div>
+            <h2>Ready to start?</h2>
+            <p>
+              The game loads hero data from a JSON file in the repository, so it can be
+              hosted directly on GitHub Pages without a backend.
+            </p>
+            <p id="data-status" class="muted">Loading hero roster…</p>
+          </div>
+          <button id="start-button" class="primary-button" disabled>Start game</button>
+        </div>
+      </section>
+
+      <section id="screen-game" class="screen card hidden">
+        <div class="card-content">
+          <div class="hero-card">
+            <div class="hero-image-wrap">
+              <img id="hero-image" src="" alt="" class="hero-image" />
+            </div>
+            <div class="hero-copy">
+              <p class="muted">Current hero</p>
+              <h2 id="hero-name">Hero Name</h2>
+              <p class="muted">Choose the correct attribute below.</p>
+            </div>
+          </div>
+
+          <div id="answer-buttons" class="button-grid" role="group" aria-label="Guess the hero attribute">
+            <button class="answer-button" data-attribute="universal">Universal</button>
+            <button class="answer-button" data-attribute="intellect">Intellect</button>
+            <button class="answer-button" data-attribute="agility">Agility</button>
+            <button class="answer-button" data-attribute="strength">Strength</button>
+          </div>
+
+          <div id="feedback-panel" class="feedback-panel hidden" aria-live="polite">
+            <p id="feedback-text"></p>
+            <button id="next-button" class="secondary-button">Next hero</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-end" class="screen card hidden">
+        <div class="card-content end-content">
+          <div class="summary-header">
+            <div>
+              <p class="eyebrow">Game complete</p>
+              <h2 id="summary-title">You finished the roster</h2>
+              <p id="summary-copy" class="subtitle-small"></p>
+            </div>
+            <button id="restart-button" class="primary-button">Play again</button>
+          </div>
+
+          <div class="results-table-wrap">
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Hero</th>
+                  <th>Your guess</th>
+                  <th>Correct attribute</th>
+                  <th>Result</th>
+                </tr>
+              </thead>
+              <tbody id="results-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>
