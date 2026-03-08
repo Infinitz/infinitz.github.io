@@ -445,7 +445,7 @@
   },
   {
     "id": 76,
-    "name": "Outworld Devourer",
+    "name": "Outworld Destroyer",
     "attribute": "intellect",
     "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/obsidian_destroyer.png"
   },
@@ -517,7 +517,7 @@
   },
   {
     "id": 131,
-    "name": "Ring Master",
+    "name": "Ringmaster",
     "attribute": "intellect",
     "image": "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/ringmaster.png"
   },
