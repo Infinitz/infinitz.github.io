@@ -199,14 +199,30 @@ function finishGame() {
   setVisibleScreen('end');
   updateStatusBar();
 
+  const wrongAnswers = state.answers.filter((answer) => !answer.isCorrect);
+
   elements.summaryTitle.textContent = `You got ${state.correctCount}/${state.queue.length} correct`;
-  elements.summaryCopy.textContent = 'All heroes have been answered. Review every hero, your guess, and the correct attribute below.';
+  elements.summaryCopy.textContent =
+    wrongAnswers.length === 0
+      ? 'Perfect run. You did not miss any heroes.'
+      : `You missed ${wrongAnswers.length} hero${wrongAnswers.length === 1 ? '' : 'es'}. Review only the wrong guesses below.`;
 
   elements.resultsBody.innerHTML = '';
 
-  state.answers.forEach((answer, index) => {
+  if (wrongAnswers.length === 0) {
     const row = document.createElement('tr');
-    row.className = answer.isCorrect ? 'correct-row' : 'wrong-row';
+    row.innerHTML = `
+      <td colspan="5">
+        <span class="result-badge correct">✓ No wrong guesses</span>
+      </td>
+    `;
+    elements.resultsBody.appendChild(row);
+    return;
+  }
+
+  wrongAnswers.forEach((answer, index) => {
+    const row = document.createElement('tr');
+    row.className = 'wrong-row';
 
     row.innerHTML = `
       <td>${index + 1}</td>
@@ -214,9 +230,7 @@ function finishGame() {
       <td>${ATTRIBUTE_LABELS[answer.guess]}</td>
       <td>${ATTRIBUTE_LABELS[answer.correctAttribute]}</td>
       <td>
-        <span class="result-badge ${answer.isCorrect ? 'correct' : 'wrong'}">
-          ${answer.isCorrect ? '✓ Correct' : '✗ Wrong'}
-        </span>
+        <span class="result-badge wrong">✗ Wrong</span>
       </td>
     `;
 
