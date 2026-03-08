@@ -63,8 +63,8 @@ function setVisibleScreen(screen) {
 
 function updateStatusBar() {
   const answered = state.answers.length;
-  const total = state.queue.length;
-  const remaining = Math.max(total - answered, 0);
+  const total = state.queue.length + 1;
+  const remaining = Math.max(total - answered + 1, 0);
 
   elements.answeredCount.textContent = `${answered}/${total}`;
   elements.remainingCount.textContent = String(remaining);
