@@ -34,6 +34,7 @@ const elements = {
   resultsBody: document.getElementById('results-body'),
   summaryTitle: document.getElementById('summary-title'),
   summaryCopy: document.getElementById('summary-copy'),
+  heroCountSelect: document.getElementById('hero-count-select'),
   answerButtons: [...document.querySelectorAll('.answer-button')],
 };
 
@@ -108,11 +109,16 @@ function renderCurrentHero() {
 
 function startGame() {
   clearAdvanceTimeout();
-  state.queue = shuffleArray(state.heroes);
+
+  const shuffledHeroes = shuffleArray(state.heroes);
+  const selectedCount = getSelectedHeroCount();
+
+  state.queue = shuffledHeroes.slice(0, selectedCount);
   state.currentIndex = 0;
   state.answers = [];
   state.correctCount = 0;
   state.status = 'playing';
+
   setVisibleScreen('game');
   renderCurrentHero();
 }
@@ -247,6 +253,21 @@ async function loadHeroes() {
     state.status = 'error';
     elements.dataStatus.textContent = `Could not load hero data: ${error.message}`;
   }
+}
+
+function getSelectedHeroCount() {
+  const value = elements.heroCountSelect.value;
+
+  if (value === 'all') {
+    return state.heroes.length;
+  }
+
+  const count = Number.parseInt(value, 10);
+  if (Number.isNaN(count) || count <= 0) {
+    return state.heroes.length;
+  }
+
+  return Math.min(count, state.heroes.length);
 }
 
 function bindEvents() {
