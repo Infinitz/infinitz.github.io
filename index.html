@@ -44,8 +44,7 @@
           <div>
             <h2>Ready to start?</h2>
             <p>
-              The game loads hero data from a JSON file in the repository, so it can be
-              hosted directly on GitHub Pages without a backend.
+              Guess the primary attribute of each Dota 2 hero from the full roster.
             </p>
             <p id="data-status" class="muted">Loading hero roster…</p>
           </div>
@@ -54,7 +53,7 @@
       </section>
 
       <section id="screen-game" class="screen card hidden">
-        <div class="card-content">
+        <div id="game-card-content" class="card-content">
           <div class="hero-card">
             <div class="hero-image-wrap">
               <img id="hero-image" src="" alt="" class="hero-image" />
@@ -75,7 +74,6 @@
 
           <div id="feedback-panel" class="feedback-panel hidden" aria-live="polite">
             <p id="feedback-text"></p>
-            <button id="next-button" class="secondary-button">Next hero</button>
           </div>
         </div>
       </section>
@@ -109,6 +107,6 @@
       </section>
     </main>
 
-    <script src="./scripts.js" defer></script>
+    <script src="./script.js" defer></script>
   </body>
 </html>

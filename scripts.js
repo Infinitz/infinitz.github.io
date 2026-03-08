@@ -5,6 +5,7 @@ const ATTRIBUTE_LABELS = {
   agility: 'Agility',
   strength: 'Strength',
 };
+const FEEDBACK_DELAY_MS = 1200;
 
 const state = {
   heroes: [],
@@ -13,12 +14,12 @@ const state = {
   answers: [],
   correctCount: 0,
   status: 'loading',
+  advanceTimeoutId: null,
 };
 
 const elements = {
   dataStatus: document.getElementById('data-status'),
   startButton: document.getElementById('start-button'),
-  nextButton: document.getElementById('next-button'),
   restartButton: document.getElementById('restart-button'),
   statusBar: document.getElementById('status-bar'),
   answeredCount: document.getElementById('answered-count'),
@@ -27,6 +28,7 @@ const elements = {
   screenStart: document.getElementById('screen-start'),
   screenGame: document.getElementById('screen-game'),
   screenEnd: document.getElementById('screen-end'),
+  gameCardContent: document.getElementById('game-card-content'),
   heroImage: document.getElementById('hero-image'),
   heroName: document.getElementById('hero-name'),
   feedbackPanel: document.getElementById('feedback-panel'),
@@ -44,6 +46,13 @@ function shuffleArray(items) {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
+}
+
+function clearAdvanceTimeout() {
+  if (state.advanceTimeoutId !== null) {
+    window.clearTimeout(state.advanceTimeoutId);
+    state.advanceTimeoutId = null;
+  }
 }
 
 function setVisibleScreen(screen) {
@@ -76,6 +85,12 @@ function disableAnswerButtons() {
   }
 }
 
+function resetFeedbackState() {
+  elements.feedbackPanel.classList.add('hidden');
+  elements.feedbackPanel.classList.remove('correct', 'wrong');
+  elements.gameCardContent.classList.remove('flash-correct', 'flash-wrong');
+}
+
 function currentHero() {
   return state.queue[state.currentIndex] ?? null;
 }
@@ -87,16 +102,16 @@ function renderCurrentHero() {
     return;
   }
 
+  resetFeedbackState();
   elements.heroName.textContent = hero.name;
   elements.heroImage.src = hero.image;
   elements.heroImage.alt = `${hero.name} hero portrait`;
-  elements.feedbackPanel.classList.add('hidden');
-  elements.nextButton.textContent = state.currentIndex === state.queue.length - 1 ? 'Finish game' : 'Next hero';
   resetAnswerButtons();
   updateStatusBar();
 }
 
 function startGame() {
+  clearAdvanceTimeout();
   state.queue = shuffleArray(state.heroes);
   state.currentIndex = 0;
   state.answers = [];
@@ -104,6 +119,14 @@ function startGame() {
   state.status = 'playing';
   setVisibleScreen('game');
   renderCurrentHero();
+}
+
+function scheduleAdvance() {
+  clearAdvanceTimeout();
+  state.advanceTimeoutId = window.setTimeout(() => {
+    state.advanceTimeoutId = null;
+    nextHero();
+  }, FEEDBACK_DELAY_MS);
 }
 
 function recordGuess(guess) {
@@ -144,10 +167,18 @@ function recordGuess(guess) {
     : `You guessed ${ATTRIBUTE_LABELS[guess]}. ${hero.name} is ${ATTRIBUTE_LABELS[hero.attribute]}.`;
 
   elements.feedbackPanel.classList.remove('hidden');
+  elements.feedbackPanel.classList.toggle('correct', isCorrect);
+  elements.feedbackPanel.classList.toggle('wrong', !isCorrect);
+  elements.gameCardContent.classList.toggle('flash-correct', isCorrect);
+  elements.gameCardContent.classList.toggle('flash-wrong', !isCorrect);
+
   updateStatusBar();
+  scheduleAdvance();
 }
 
 function nextHero() {
+  clearAdvanceTimeout();
+
   if (state.answers.length >= state.queue.length) {
     finishGame();
     return;
@@ -163,12 +194,13 @@ function nextHero() {
 }
 
 function finishGame() {
+  clearAdvanceTimeout();
   state.status = 'finished';
   setVisibleScreen('end');
   updateStatusBar();
 
   elements.summaryTitle.textContent = `You got ${state.correctCount}/${state.queue.length} correct`;
-  elements.summaryCopy.textContent = `All heroes have been answered. Review every hero, your guess, and the correct attribute below.`;
+  elements.summaryCopy.textContent = 'All heroes have been answered. Review every hero, your guess, and the correct attribute below.';
 
   elements.resultsBody.innerHTML = '';
 
@@ -216,7 +248,6 @@ async function loadHeroes() {
 
 function bindEvents() {
   elements.startButton.addEventListener('click', startGame);
-  elements.nextButton.addEventListener('click', nextHero);
   elements.restartButton.addEventListener('click', startGame);
 
   for (const button of elements.answerButtons) {
