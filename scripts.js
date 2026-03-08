@@ -252,7 +252,7 @@ async function loadHeroes() {
 
     state.heroes = heroes;
     state.status = 'ready';
-    elements.dataStatus.textContent = `${heroes.length + 1} heroes loaded.`;
+    elements.dataStatus.textContent = `${heroes.length} heroes loaded.`;
     elements.startButton.disabled = false;
   } catch (error) {
     state.status = 'error';
