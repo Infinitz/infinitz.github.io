@@ -31,8 +31,6 @@ const elements = {
   gameCardContent: document.getElementById('game-card-content'),
   heroImage: document.getElementById('hero-image'),
   heroName: document.getElementById('hero-name'),
-  feedbackPanel: document.getElementById('feedback-panel'),
-  feedbackText: document.getElementById('feedback-text'),
   resultsBody: document.getElementById('results-body'),
   summaryTitle: document.getElementById('summary-title'),
   summaryCopy: document.getElementById('summary-copy'),
@@ -86,8 +84,6 @@ function disableAnswerButtons() {
 }
 
 function resetFeedbackState() {
-  elements.feedbackPanel.classList.add('hidden');
-  elements.feedbackPanel.classList.remove('correct', 'wrong');
   elements.gameCardContent.classList.remove('flash-correct', 'flash-wrong');
 }
 
@@ -162,13 +158,6 @@ function recordGuess(guess) {
     }
   }
 
-  elements.feedbackText.textContent = isCorrect
-    ? `${hero.name} is ${ATTRIBUTE_LABELS[hero.attribute]}. Nice.`
-    : `You guessed ${ATTRIBUTE_LABELS[guess]}. ${hero.name} is ${ATTRIBUTE_LABELS[hero.attribute]}.`;
-
-  elements.feedbackPanel.classList.remove('hidden');
-  elements.feedbackPanel.classList.toggle('correct', isCorrect);
-  elements.feedbackPanel.classList.toggle('wrong', !isCorrect);
   elements.gameCardContent.classList.toggle('flash-correct', isCorrect);
   elements.gameCardContent.classList.toggle('flash-wrong', !isCorrect);
 

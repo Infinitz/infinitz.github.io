@@ -323,3 +323,38 @@ button {
     padding: 18px;
   }
 }
+
+.answer-universal {
+  background: rgba(201, 158, 49, 0.18);
+  border-color: rgba(201, 158, 49, 0.6);
+}
+
+.answer-intellect {
+  background: rgba(72, 170, 255, 0.18);
+  border-color: rgba(72, 170, 255, 0.6);
+}
+
+.answer-agility {
+  background: rgba(76, 175, 80, 0.18);
+  border-color: rgba(76, 175, 80, 0.6);
+}
+
+.answer-strength {
+  background: rgba(244, 67, 54, 0.18);
+  border-color: rgba(244, 67, 54, 0.6);
+}
+
+.answer-universal:hover:not(:disabled),
+.answer-intellect:hover:not(:disabled),
+.answer-agility:hover:not(:disabled),
+.answer-strength:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.answer-button.correct {
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.45);
+}
+
+.answer-button.wrong {
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.45);
+}
